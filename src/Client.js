@@ -1,7 +1,7 @@
 'use strict';
 
 const EventEmitter = require('events');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra');
 const moduleRaid = require('@pedroslopez/moduleraid/moduleraid');
 
 const Util = require('./util/Util');
@@ -18,6 +18,8 @@ const WebCacheFactory = require('./webCache/WebCacheFactory');
 const { ClientInfo, Message, MessageMedia, Contact, Location, Poll, PollVote, GroupNotification, Label, Call, Buttons, List, Reaction, Broadcast} = require('./structures');
 const NoAuth = require('./authStrategies/NoAuth');
 const {exposeFunctionIfAbsent} = require('./util/Puppeteer');
+
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 
 /**
  * Starting point for interacting with the WhatsApp Web API
@@ -274,6 +276,8 @@ class Client extends EventEmitter {
 
         browser = null;
         page = null;
+
+        puppeteer.use(StealthPlugin());
 
         await this.authStrategy.beforeBrowserInitialized();
 
