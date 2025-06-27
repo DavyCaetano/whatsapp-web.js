@@ -300,12 +300,14 @@ exports.LoadUtils = () => {
             await window.Store.SendChannelMessage.updateNewsletterMsgRecord(msg);
             return msg;
         }
-
-        await window.Store.SendMessage.addAndSendMsgToChat(chat, message);
-        await window.Store.HistorySync.sendPeerDataOperationRequest(3, {
-            chatId: chat.id
-        });
-        return window.Store.Msg.get(newMsgKey._serialized);
+        // stop reloading all chat
+        // await window.Store.SendMessage.addAndSendMsgToChat(chat, message);
+        // await window.Store.HistorySync.sendPeerDataOperationRequest(3, {
+        //     chatId: chat.id
+        // });
+        // return window.Store.Msg.get(newMsgKey._serialized);
+        const [sentMsg] = await window.Store.SendMessage.addAndSendMsgToChat(chat, message);
+        return sentMsg;
     };
 	
     window.WWebJS.editMessage = async (msg, content, options = {}) => {
